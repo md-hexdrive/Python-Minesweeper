@@ -87,7 +87,9 @@ class MineSweeperGUI(tk.Label):
 The class that handles the game's logic
 """
 class Minesweeper:
-    
+    """
+    Create a new minesweeper game with a specific board size and number of mines
+    """
     def __init__(self, board_size, mine_count):
         self.board_width = board_size[0]
         self.board_height = board_size[1]
@@ -97,7 +99,11 @@ class Minesweeper:
         self.fill_board()
         self.found_mine = False
         self.game_running = True
-
+    
+    """
+    Fill the board with with data (place the mines, and put the number of mines adjacent to
+    a board position in that position)
+    """
     def fill_board(self):
         self.place_mines()
         for i in range(self.board_width):
@@ -108,6 +114,9 @@ class Minesweeper:
                 if adjacent_mine_count > 0:
                     self.board[i,j] = adjacent_mine_count
     
+    """
+    The first time the user clicks on a mine, they are saved, the second time it is game over
+    """
     def mine_found(self, pos):
         if self.found_mine:
             self.game_over()
@@ -176,7 +185,10 @@ class Minesweeper:
         else:
             return False
     #def reveal_surroundings(self, pos):
-        
+    
+    """
+    How many mines are adjacent to this position?
+    """
     def num_of_adjacent_mines(self, pos):
         area = self.board[max(pos[0]-1, 0) : min(pos[0]+2, self.board_width),
                           max(pos[1]-1, 0) : min(pos[1]+2, self.board_height)]
