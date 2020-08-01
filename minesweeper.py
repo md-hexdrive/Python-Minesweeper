@@ -12,8 +12,9 @@ Customized button subclass that serves as a point on the game board
 """
 class MineButton(tk.Button):
     def __init__(self, root, posx, posy, board):
-        super(MineButton, self, ).__init__(root, command = self.click, width=5, height=2,
-                                           font=font.Font(family="Helvetica", size=18), fg="red")
+        super(MineButton, self, ).__init__(root, command = self.click, width=4, height=2,
+                                           font=font.Font(family="Helvetica", size=12, weight="bold"),
+                                           fg="red")
         self.root = root
         self.posx = posx
         self.posy = posy
