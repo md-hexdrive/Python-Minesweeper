@@ -23,10 +23,6 @@ class MineButton(tk.Button):
         self.flagged = False
         self.bind('<Button-3>', self.flag)
     
-    """
-    click() what happens when this button is clicked
-    """
-    def click(self):
     def flag(self, event):
         print("flagging")
         if not self.revealed:
@@ -39,6 +35,7 @@ class MineButton(tk.Button):
                 self.config(state=tk.DISABLED, #image = self.root.flagImage,
                                 disabledforeground="#345678", text="F")
         
+    def reveal_contents(self, clicked):
         if not self.revealed and self.root.game.game_running:
             self.revealed = True
             contents = self.root.game.board[self.posx, self.posy]
@@ -61,10 +58,17 @@ class MineButton(tk.Button):
             else:
                 self.config(state=tk.DISABLED, fg="#345678", bg='gray64', text=str(contents))
                 if contents == CLEAR_SPACE:
-                    self.root.reveal_spaces(self.root.game.pool_fill((self.posx, self.posy)))
+                    self.config(state=tk.DISABLED, disabledforeground="#345678", bg='gray64', text="")
+                    if clicked:
+                        self.root.reveal_spaces(self.root.game.pool_fill((self.posx, self.posy)))
             
             
-        print("Button: ", self.posx, self.posy, " was pressed")
+        print("Board Position: ", self.posx, self.posy, " was accessed")
+    """
+    click() what happens when this button is clicked
+    """
+    def click(self):
+        self.reveal_contents(clicked=True)
 
 """
 The game's GUI class
@@ -97,7 +101,7 @@ class MineSweeperGUI(tk.Label):
         #self.pack_forget()
     def reveal_spaces(self, spaces):
         for pos in spaces:
-            self.buttonArray[pos[0]][pos[1]].click()
+            self.buttonArray[pos[0]][pos[1]].reveal_contents(clicked=False)
 """
 The class that handles the game's logic
 """
