@@ -3,8 +3,10 @@ import tkinter as tk
 from tkinter import font
 import random
 
+import time
 CLEAR_SPACE = 0
 MINE = 9
+
 
 """
 Customized button subclass that serves as a point on the game board
@@ -39,15 +41,17 @@ class MineButton(tk.Button):
         if not self.revealed and self.root.game.game_running:
             self.revealed = True
             contents = self.root.game.board[self.posx, self.posy]
+
             if contents == MINE:
                 self.root.game.mine_found((self.posx, self.posy))
                 if self.root.game.game_running:
-                    self.config(state=tk.DISABLED, fg="#345678", bg='navyblue', text="M")
+                    self.config(state=tk.DISABLED, #image = self.root.flagImage,
+                                disabledforeground="#345678", bg='navyblue', text="M")
                 else:
-                    self.config(state=tk.DISABLED, fg="#345678", bg='darkred', text="M")
+                    self.config(state=tk.DISABLED, disabledforeground="#345678", bg='darkred', text="M")
                     self.root.blow_everything_up()
             else:
-                self.config(state=tk.DISABLED, fg="#345678", bg='gray64', text=str(contents))
+                self.config(state=tk.DISABLED, disabledforeground="#345678", bg='gray64', text=str(contents))
                 if contents == CLEAR_SPACE:
                     self.config(state=tk.DISABLED, disabledforeground="#345678", bg='gray64', text="")
                     if clicked:
@@ -71,6 +75,8 @@ class MineSweeperGUI(tk.Label):
         self.mine_count = mine_count
         self.game = Minesweeper(board_size, mine_count)
         
+        self.flagImage = tk.PhotoImage(file = r"C:\Users\Paul\Documents\GitHub\Python-Minesweeper\MinesweeperFlag.png").subsample(2,2)
+        
         self.buttonArray = []
         for i in range(self.game.board_width):
             self.buttonArray.append([])
@@ -79,6 +85,7 @@ class MineSweeperGUI(tk.Label):
                 self.buttonArray[i].append(newButton)
                 newButton.grid(column = i, row = j)
         self.pack()
+        root.title("Minesweeper")
         root.mainloop()
     
     def blow_everything_up(self): # game over, the user lost
@@ -141,8 +148,8 @@ class Minesweeper:
         spaces_to_reveal = []
         empty_spaces = []
         free_space_count = 0
-        
-        if self.board[pos] != 0:
+        board_copy = np.copy(self.board)
+        if board_copy[pos] != 0:
             return spaces_to_reveal
         
         spaces_to_reveal = [pos]
@@ -168,11 +175,13 @@ class Minesweeper:
             
             next_positions = [up, down, left, right, up_left, up_right, down_left, down_right]
             for pos in next_positions:
-                if self.is_inside_board(pos) and not pos in spaces_to_reveal:
-                    if not self.is_a_mine(pos):
-                        spaces_to_reveal.append(pos)
-                        if self.is_empty_space(pos):
+                if self.is_inside_board(pos) and not (pos in spaces_to_reveal) and not self.is_a_mine(pos):
+                    spaces_to_reveal.append(pos)
+                    if self.is_empty_space(pos):
                             empty_spaces.append(pos)
+           
+                        
+        print(board_copy)
         return spaces_to_reveal
     
     # does this space contain a mine?
@@ -207,6 +216,10 @@ class Minesweeper:
     
     def game_over(self):
         self.game_running = False
+    
+    """
+    Place mines in random positions around the board
+    """
     def place_mines(self):
         
         for i in range(self.mine_count+1):
@@ -220,7 +233,7 @@ class Minesweeper:
 
 
 if __name__ == '__main__':
-    game = Minesweeper((7, 7), 10)
-    print(game.board)
-    gui_game = MineSweeperGUI(root=tk.Tk())
-    
+    #game = Minesweeper((11, 11), 10)
+    #print(game.board)
+    gui_game = MineSweeperGUI(root=tk.Tk(), board_size=(11, 11), mine_count=10)
+    print(gui_game.game.board)
