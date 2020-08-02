@@ -20,11 +20,25 @@ class MineButton(tk.Button):
         self.posy = posy
         self.board = board
         self.revealed = False
+        self.flagged = False
+        self.bind('<Button-3>', self.flag)
     
     """
     click() what happens when this button is clicked
     """
     def click(self):
+    def flag(self, event):
+        print("flagging")
+        if not self.revealed:
+            if self.flagged:
+                self.flagged = False
+                self.config(state=tk.NORMAL, #image = self.root.flagImage,
+                            disabledforeground="#345678", text="")
+            else:
+                self.flagged = True
+                self.config(state=tk.DISABLED, #image = self.root.flagImage,
+                                disabledforeground="#345678", text="F")
+        
         if not self.revealed and self.root.game.game_running:
             self.revealed = True
             contents = self.root.game.board[self.posx, self.posy]
