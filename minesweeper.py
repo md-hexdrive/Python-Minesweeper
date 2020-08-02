@@ -39,15 +39,6 @@ class MineButton(tk.Button):
         if not self.revealed and self.root.game.game_running:
             self.revealed = True
             contents = self.root.game.board[self.posx, self.posy]
-#             if contents == 0:
-#                 contents = self.root.game.num_of_adjacent_mines((self.posx, self.posy))
-#                 print("Number of adjacent mines:", contents)
-#                 if contents == 0:
-#                     buttonsToCheck = self.root.buttonArray[max(0, self.posx-1) : min(self.posx+2, self.root.game.board_width)][max(0, self.posy-1) : min(self.posy+2, self.root.game.board_height)]
-#                     for i in range(len(buttonsToCheck)):
-#                         for j in range(len(buttonsToCheck)):
-#                             if not buttonsToCheck[i][j].revealed:
-#                                 buttonsToCheck[i][j].click()
             if contents == MINE:
                 self.root.game.mine_found((self.posx, self.posy))
                 if self.root.game.game_running:
