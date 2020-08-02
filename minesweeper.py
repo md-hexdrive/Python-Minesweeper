@@ -9,12 +9,22 @@ MINE = 9
 
 
 """
+Main GUI class
+
+"""
+class MineGameGUI(tk.Tk):
+    def __init__(self):
+        super(MineGameGUI, self).__init__()
+        self.title("Minesweeper")
+        
+
+"""
 Customized button subclass that serves as a point on the game board
 
 """
 class MineButton(tk.Button):
     def __init__(self, root, posx, posy, board):
-        super(MineButton, self, ).__init__(root, command = self.click, width=4, height=2,
+        super(MineButton, self).__init__(root, command = self.click, width=4, height=2,
                                            font=font.Font(family="Helvetica", size=12, weight="bold"),
                                            fg="red")
         self.root = root
@@ -26,7 +36,7 @@ class MineButton(tk.Button):
         self.bind('<Button-3>', self.flag)
     
     def flag(self, event):
-        print("flagging")
+        
         if not self.revealed:
             if self.flagged:
                 self.flagged = False
@@ -100,6 +110,7 @@ class MineSweeperGUI(tk.Label):
     def reveal_spaces(self, spaces):
         for pos in spaces:
             self.buttonArray[pos[0]][pos[1]].reveal_contents(clicked=False)
+    
 """
 The class that handles the game's logic
 """
@@ -235,5 +246,5 @@ class Minesweeper:
 if __name__ == '__main__':
     #game = Minesweeper((11, 11), 10)
     #print(game.board)
-    gui_game = MineSweeperGUI(root=tk.Tk(), board_size=(11, 11), mine_count=10)
+    gui_game = MineSweeperGUI(root=MineGameGUI(), board_size=(11, 11), mine_count=10)
     print(gui_game.game.board)
