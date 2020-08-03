@@ -233,10 +233,13 @@ class Minesweeper:
     """
     def place_mines(self):
         
-        for i in range(self.mine_count+1):
+        while len(self.mine_positions) < self.mine_count:
+            
             x_cords = random.choice(range(self.board_width))
             y_cords = random.choice(range(self.board_height))
-            
+            pos = (x_cords, y_cords)
+            if pos in self.mine_positions:
+                continue
             self.mine_positions.append((x_cords, y_cords)) 
         
         for pos in self.mine_positions:
