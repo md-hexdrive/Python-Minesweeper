@@ -13,10 +13,29 @@ Main GUI class
 
 """
 class MineGameGUI(tk.Tk):
-    def __init__(self):
+    def __init__(self, board_size=(11, 11), n_mines=10):
         super(MineGameGUI, self).__init__()
         self.title("Minesweeper")
+        self.menu = tk.Menu(self)
         
+        self.filemenu = tk.Menu(self.menu, tearoff=0)
+        self.filemenu.add_command(label="New Game", command=MineGameGUI)
+        self.menu.add_cascade(label="File", menu=self.filemenu)
+        
+        self.menu.add_command(label="Help", command=self.help_window)
+        self.config(menu=self.menu)
+        
+        self.game_gui = MineSweeperGUI(root=self, board_size=board_size, mine_count=n_mines)
+        self.game_gui.pack()
+    
+    def help_window(self):
+        help_win = tk.Toplevel()
+        help_win.title("About")
+        label = tk.Label(help_win, text="""Custom Minesweeper 1.0 \nWritten by: MD-Hexdrive""")
+        label.pack(padx=10, pady=10)
+        
+        button = tk.Button(help_win, text="Ok", width=10, command=help_win.destroy)
+        button.pack(padx=10, pady=10)
 
 """
 Customized button subclass that serves as a point on the game board
@@ -47,7 +66,7 @@ class MineButton(tk.Button):
                 self.config(state=tk.DISABLED, #image = self.root.flagImage,
                                 disabledforeground="#345678", text="F")
         
-    def reveal_contents(self, clicked):
+    def reveal_contents(self, clicked=False):
         if not self.revealed and self.root.game.game_running:
             self.revealed = True
             contents = self.root.game.board[self.posx, self.posy]
@@ -94,9 +113,6 @@ class MineSweeperGUI(tk.Label):
                 newButton = MineButton(self, i, j, self.game.board)
                 self.buttonArray[i].append(newButton)
                 newButton.grid(column = i, row = j)
-        self.pack()
-        root.title("Minesweeper")
-        root.mainloop()
     
     def blow_everything_up(self): # game over, the user lost
         for i in range(self.game.board_width):
@@ -187,6 +203,7 @@ class Minesweeper:
             next_positions = [up, down, left, right, up_left, up_right, down_left, down_right]
             for pos in next_positions:
                 if self.is_inside_board(pos) and not (pos in spaces_to_reveal) and not self.is_a_mine(pos):
+                    
                     spaces_to_reveal.append(pos)
                     if self.is_empty_space(pos):
                             empty_spaces.append(pos)
@@ -249,5 +266,6 @@ class Minesweeper:
 if __name__ == '__main__':
     #game = Minesweeper((11, 11), 10)
     #print(game.board)
-    gui_game = MineSweeperGUI(root=MineGameGUI(), board_size=(11, 11), mine_count=10)
-    print(gui_game.game.board)
+    #gui_game = MineSweeperGUI(root=MineGameGUI(), board_size=(11, 11), mine_count=10)
+    gui_game = MineGameGUI()
+    #print(gui_game.game.board)
