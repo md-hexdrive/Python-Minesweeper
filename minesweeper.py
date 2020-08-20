@@ -104,7 +104,7 @@ class MineSweeperGUI(tk.Label):
         self.mine_count = mine_count
         self.game = Minesweeper(board_size, mine_count)
         
-        self.flagImage = tk.PhotoImage(file = r"C:\Users\Paul\Documents\GitHub\Python-Minesweeper\MinesweeperFlag.png").subsample(2,2)
+        self.flagImage = tk.PhotoImage(file = r".\MinesweeperFlag.png").subsample(2,2)
         
         self.buttonArray = []
         for i in range(self.game.board_width):
