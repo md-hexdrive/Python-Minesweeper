@@ -56,7 +56,7 @@ class MineButton(tk.Button):
     
     def flag(self, event):
         
-        if not self.revealed:
+        if not self.revealed and self.root.game.game_running:
             if self.flagged:
                 self.flagged = False
                 self.config(state=tk.NORMAL, #image = self.root.flagImage,
